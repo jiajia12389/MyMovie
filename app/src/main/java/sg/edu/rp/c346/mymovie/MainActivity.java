@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         alMovieList = new ArrayList<>();
 
 
-        Movie m1 = new Movie("The Avengers","2012","pg13","Action | Sci-Fi","15/11/2014", "Golden Village - Bishan","Description" );
-        Movie m2 = new Movie("Planes","2013","pg","Animation | Comedy","15/5/2015", "Cathay - AMK Hub","Description" );
+        Movie m1 = new Movie("The Avengers","2012","pg13","Action | Sci-Fi","15/11/2014", "Golden Village - Bishan","Description", 4);
+        Movie m2 = new Movie("Planes","2013","pg","Animation | Comedy","15/5/2015", "Cathay - AMK Hub","Description", 2 );
 
 
         alMovieList.add(m1);
@@ -49,13 +51,45 @@ public class MainActivity extends AppCompatActivity {
         String theatre = intentReceived.getStringExtra("Theatre");
         String des = intentReceived.getStringExtra("Des");
 
-        Movie m3 = new Movie(title, year,rated, genre, date, theatre, des);
+        String deleteTitle = intentReceived.getStringExtra("Delete");
+
+        Movie m3 = new Movie(title, year,rated, genre, date, theatre, des, 5);
         alMovieList.add(m3);
 
         caMoviet.notifyDataSetChanged();
 
-    }
+       for(Movie i: alMovieList){
+           if(deleteTitle.equals(title)){
+               alMovieList.remove(i);
+           }
+       }
 
+
+        lvMovie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, Display.class);
+
+                intent.putExtra("Title", alMovieList.get(position).getTitle())
+                        .putExtra("Year", alMovieList.get(position).getYear())
+                        .putExtra("Genre", alMovieList.get(position).getGenre())
+                        .putExtra("Date",alMovieList.get(position).getWatched_on())
+                        .putExtra("Rated",alMovieList.get(position).getRated())
+                        .putExtra("Theatre", alMovieList.get(position).getIn_theatre())
+                        .putExtra("Rating", alMovieList.get(position).getRating())
+                        .putExtra("Des", alMovieList.get(position).getDescription());
+                startActivity(intent);
+
+
+
+            }
+        });
+
+
+
+
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
