@@ -43,27 +43,33 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent intentReceived = getIntent();
-        String title = intentReceived.getStringExtra("Title");
-        String year = intentReceived.getStringExtra("Year");
-        String genre = intentReceived.getStringExtra("Genre");
-        String rated = intentReceived.getStringExtra("Rated");
-        String date = intentReceived.getStringExtra("Date");
-        String theatre = intentReceived.getStringExtra("Theatre");
-        String des = intentReceived.getStringExtra("Des");
 
-        String deleteTitle = intentReceived.getStringExtra("Delete");
+        if (getIntent().hasExtra("Delete")) {
 
-        Movie m3 = new Movie(title, year,rated, genre, date, theatre, des, 5);
-        alMovieList.add(m3);
+            String deleteTitle = intentReceived.getStringExtra("Delete");
 
-        caMoviet.notifyDataSetChanged();
+            for(Movie i: alMovieList){
+                if(i.getTitle().equals(deleteTitle)){
+                    alMovieList.remove(i);
+                }
+            }
+        }
+        else {
+            String title = intentReceived.getStringExtra("Title");
+            String year = intentReceived.getStringExtra("Year");
+            String genre = intentReceived.getStringExtra("Genre");
+            String rated = intentReceived.getStringExtra("Rated");
+            String date = intentReceived.getStringExtra("Date");
+            String theatre = intentReceived.getStringExtra("Theatre");
+            String des = intentReceived.getStringExtra("Des");
 
-       for(Movie i: alMovieList){
-           if(deleteTitle.equals(title)){
-               alMovieList.remove(i);
-           }
-       }
 
+
+            Movie m3 = new Movie(title, year,rated, genre, date, theatre, des, 5);
+            alMovieList.add(m3);
+
+            caMoviet.notifyDataSetChanged();
+        }
 
         lvMovie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
